@@ -18,6 +18,15 @@ repositories {
 }
 
 dependencies {
+
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper' //JSP 템플릿
+	implementation 'jakarta.servlet:jakarta.servlet-api' //jstl
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'//jstl
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //jstl
+	
+	
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'//swgger 추가
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
@@ -36,3 +45,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+compileJava { //컴파일 시 메서드 매개변수 이름 유지(swagger 테스트용) //같은 문제발생시 //window>preferences>java>compiler>Store information about method parameters (usable via reflection) 활성화하면 해결
+    options.compilerArgs << '-parameters'
+}
+
+
