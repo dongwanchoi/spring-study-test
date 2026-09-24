@@ -10,6 +10,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cdw.blog.model.RoleType;
@@ -17,6 +19,7 @@ import com.cdw.blog.model.User;
 import com.cdw.blog.repository.UserRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.transaction.Transactional;
 
 @RestController
 public class DummyControllerTest {
@@ -28,6 +31,24 @@ public class DummyControllerTest {
 	// get(),orElseGet(),orElseThrow()
 
 
+	@Transactional // 함수 종료시에 자동 commit 이 됨.
+	@PutMapping("/dummy/user/{id}")
+	public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
+		System.out.println("id : "+id);
+		System.out.println("password : "+requestUser.getPassword());
+		System.out.println("email : "+requestUser.getEmail());
+		
+		User user = userRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("수정에 실패하였습니다.");
+		});
+		user.setPassword(requestUser.getPassword());
+		//user.setEmail(requestUser.getEmail());
+		
+		// userRepository.save(user);
+		
+		return user;
+	}
+	
 	@Operation(summary ="리스트 조회", description = "전체 조회하기")
 	@GetMapping("/dummy/users")
 	public List<User> list(){ 
