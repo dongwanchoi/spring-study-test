@@ -3,6 +3,10 @@ package com.cdw.blog.test;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +29,20 @@ public class DummyControllerTest {
 
 
 	@Operation(summary ="리스트 조회", description = "전체 조회하기")
-	@GetMapping("/dummy/user/find")
+	@GetMapping("/dummy/users")
 	public List<User> list(){ 
 		return userRepository.findAll();
 	}
+	
+	@GetMapping("/dummy/user")
+	public List<User> pageList(@PageableDefault(size=2, sort="id", direction = Sort.Direction.DESC) Pageable pageble){
+		Page<User> pagingUser = userRepository.findAll(pageble);
+		
+		if(pagingUser.isLast()) {}
+		List<User> users = pagingUser.getContent();
+		return users;
+	}
+	
 	
 	@GetMapping("/dummy/user/{id}")
 	public User detail(@PathVariable int id) {
