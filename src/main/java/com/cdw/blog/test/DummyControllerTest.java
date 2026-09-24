@@ -1,5 +1,7 @@
 package com.cdw.blog.test;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,8 @@ import com.cdw.blog.model.RoleType;
 import com.cdw.blog.model.User;
 import com.cdw.blog.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 public class DummyControllerTest {
 
@@ -19,7 +23,14 @@ public class DummyControllerTest {
 	// Optional 함수 찾아보기
 	// get(),orElseGet(),orElseThrow()
 
-	@GetMapping("/dummmy/user/{id}")
+
+	@Operation(summary ="리스트 조회", description = "전체 조회하기")
+	@GetMapping("/dummy/user/find")
+	public List<User> list(){ 
+		return userRepository.findAll();
+	}
+	
+	@GetMapping("/dummy/user/{id}")
 	public User detail(@PathVariable int id) {
 		User user = userRepository.findById(id).orElseThrow(() -> {
 			return new IllegalArgumentException("해당 유저 없음. id: " + id);
